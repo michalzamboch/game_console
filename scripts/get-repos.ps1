@@ -1,4 +1,12 @@
-cd ..\lib
+# https://github.com/adafruit/Adafruit-ST7735-Library
+# https://github.com/adafruit/Adafruit-GFX-Library
+# https://github.com/adafruit/Adafruit_BusIO
+
+$repos =
+    "Adafruit-ST7735-Library",
+    "Adafruit-GFX-Library",
+    "Adafruit_BusIO"
+
 
 function Check-Repo ($repo_name) {
 
@@ -7,21 +15,22 @@ function Check-Repo ($repo_name) {
 
     if ( Test-Path -Path $repo_name )
     {
+        Write-Output ""
         Write-Output ("Pulling: " + $repo_name)
         git pull
-        Write-Output ""
     }
     else
     {
-        git clone $full_repo_link
         Write-Output ""
+        git clone $full_repo_link
     }
 }
 
-Check-Repo("Adafruit-ST7735-Library")
-Check-Repo("Adafruit-GFX-Library")
-Check-Repo("Adafruit_BusIO")
+# --------------------------------------------------
 
-# https://github.com/adafruit/Adafruit-ST7735-Library
-# https://github.com/adafruit/Adafruit-GFX-Library
-# https://github.com/adafruit/Adafruit_BusIO
+cd ..\lib
+
+foreach ($repo in $repos)
+{
+    Check-Repo($repo)
+}
