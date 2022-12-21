@@ -34,4 +34,6 @@
 # Directories
 /.pio
 /.vscode
-lib/
+lib/Adafruit_BusIO
+lib/Adafruit-GFX-Library
+lib/Adafruit-ST7735-Library
