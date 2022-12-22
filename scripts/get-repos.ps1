@@ -3,25 +3,22 @@
 # https://github.com/adafruit/Adafruit_BusIO
 
 $repos =
-    "Adafruit-ST7735-Library",
-    "Adafruit-GFX-Library",
-    "Adafruit_BusIO"
+    "adafruit/Adafruit-ST7735-Library",
+    "adafruit/Adafruit-GFX-Library",
+    "adafruit/Adafruit_BusIO"
 
+function Check-Repo ($full_repo_name) {
+    $full_repo_link = "https://github.com/" + $full_repo_name
+    $short_repo_name = $full_repo_name.Replace("adafruit/", "")
 
-function Check-Repo ($repo_name) {
-
-    $repo_link = "https://github.com/adafruit/"
-    $full_repo_link = $repo_link + $repo_name
-
-    if ( Test-Path -Path $repo_name )
+    Write-Output ""
+    if ( Test-Path -Path $short_repo_name )
     {
-        Write-Output ""
-        Write-Output ("Pulling: " + $repo_name)
+        Write-Output ("Pulling: " + $full_repo_name)
         git pull
     }
     else
     {
-        Write-Output ""
         git clone $full_repo_link
     }
 }
@@ -29,8 +26,8 @@ function Check-Repo ($repo_name) {
 # --------------------------------------------------
 
 cd ..\lib
-
 foreach ($repo in $repos)
 {
     Check-Repo($repo)
 }
+cd ..\scripts
