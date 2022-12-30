@@ -26,6 +26,7 @@ function Check-Repo ($full_repo_name) {
 # --------------------------------------------------
 
 pushd
+cd ..\lib
 foreach ($repo in $repos)
 {
     Check-Repo($repo)
