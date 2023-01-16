@@ -15,7 +15,10 @@ function Check-Repo ($full_repo_name) {
     if ( Test-Path -Path $short_repo_name )
     {
         Write-Output ("Pulling: " + $full_repo_name)
+        pushd
+        cd $short_repo_name
         git pull
+        popd
     }
     else
     {
