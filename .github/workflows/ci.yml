@@ -22,7 +22,7 @@ jobs:
         run: |
           pushd
           cd scripts
-          get-repos.ps1
+          .\get-repos.ps1
           popd
       
       - name: Install PlatformIO Core
