@@ -1,4 +1,4 @@
-#include "include.h"
+#include <include.h>
 
 #define DELKA_KOSTKY 5
 
@@ -184,7 +184,7 @@ void towerOfHanoi::volba()
         {
             soucasnyCas = millis();
 
-            if ((ovladani == T_DO_LEVA) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
+            if ((ovladani == T_DO_LEVA) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
             {
                 intPrepnuti.soucasnaHodnota = soucasnyCas;
                 
@@ -203,7 +203,7 @@ void towerOfHanoi::volba()
                 Serial.printf("Temp[%d] = %d\n", i, temp[i]);
                 break;
             }
-            else if ((ovladani == T_DO_ZADU) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
+            else if ((ovladani == T_DO_ZADU) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
             {
                 intPrepnuti.soucasnaHodnota = soucasnyCas;
                 
@@ -222,7 +222,7 @@ void towerOfHanoi::volba()
                 Serial.printf("Temp[%d] = %d\n", i, temp[i]);
                 break;
             }
-            else if ((ovladani == T_DO_PRAVA) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
+            else if ((ovladani == T_DO_PRAVA) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
             {
                 intPrepnuti.soucasnaHodnota = soucasnyCas;
                 
@@ -294,7 +294,7 @@ void towerOfHanoi::vyhodnotHru()
         while (true)
         {
             soucasnyCas = millis();
-            if ((ovladani > 0) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
+            if ((ovladani > 0) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
             {
                 break;
             }

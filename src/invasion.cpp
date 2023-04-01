@@ -2,7 +2,7 @@
  * Soubor invasion.cpp obsahuje kód ke hře invasion
  * */
 
-#include "include.h"
+#include <include.h>
 
 extern unsigned int ovladani;
 
@@ -177,14 +177,14 @@ void invasion::jadroHry()
 void invasion::ovladaniFunkce()
 {
     unsigned long soucasnyCas = millis();
-    if (((ovladani & T_DO_PRAVA) == T_DO_PRAVA) && ((soucasnyCas - intPohybRak.soucasnaHodnota) > intPohybRak.delka) && (raketkaPozX < (159 - sirkaRaketky)))
+    if (((ovladani & T_DO_PRAVA) == T_DO_PRAVA) && ((soucasnyCas - intPohybRak.soucasnaHodnota) > intPohybRak.interval) && (raketkaPozX < (159 - sirkaRaketky)))
     {
         intPohybRak.soucasnaHodnota = soucasnyCas;
         vykresliRaketku(ST7735_BLACK);
         raketkaPozX++;
         vykresliRaketku(ST77XX_GREEN);
     }
-    else if (((ovladani & T_DO_LEVA) == T_DO_LEVA)  && ((soucasnyCas - intPohybRak.soucasnaHodnota) > intPohybRak.delka) && (raketkaPozX > 0))
+    else if (((ovladani & T_DO_LEVA) == T_DO_LEVA)  && ((soucasnyCas - intPohybRak.soucasnaHodnota) > intPohybRak.interval) && (raketkaPozX > 0))
     {
         intPohybRak.soucasnaHodnota = soucasnyCas;
         vykresliRaketku(ST7735_BLACK);
@@ -192,7 +192,7 @@ void invasion::ovladaniFunkce()
         vykresliRaketku(ST77XX_GREEN);
     }
     
-    if (((ovladani & T_1) == T_1) && ((soucasnyCas - intVystrel.soucasnaHodnota) > intVystrel.delka))
+    if (((ovladani & T_1) == T_1) && ((soucasnyCas - intVystrel.soucasnaHodnota) > intVystrel.interval))
     {
         intVystrel.soucasnaHodnota = soucasnyCas;
         vytvorStrelu();
@@ -386,7 +386,7 @@ void invasion::vytvorStrelu()
 void invasion::vykresliAPosunStrely(int oKolik)
 {
     unsigned long soucasnyCas = millis();
-    if ((soucasnyCas - intPohybStrely.soucasnaHodnota) > intPohybStrely.delka)
+    if ((soucasnyCas - intPohybStrely.soucasnaHodnota) > intPohybStrely.interval)
     {
         intPohybStrely.soucasnaHodnota = soucasnyCas;
         for (int i = 0; i < pocetStrel; i++)
@@ -493,7 +493,7 @@ void invasion::vytvorJednohoNepritele()
 void invasion::vykresliAPosunNepratele(int oKolik)
 {
     unsigned long soucasnyCas = millis();
-    if ((soucasnyCas - intPohybNepratel.soucasnaHodnota) > intPohybNepratel.delka)
+    if ((soucasnyCas - intPohybNepratel.soucasnaHodnota) > intPohybNepratel.interval)
     {
         intPohybNepratel.soucasnaHodnota = soucasnyCas;
         for (int i = 0; i < pocetNepratel; i++)
@@ -574,7 +574,7 @@ void invasion::konecneHlaseni()
     while (true)
     {
         soucasnyCas = millis();
-        if ((ovladani > 0) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
+        if ((ovladani > 0) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
         {
             break;
         }
@@ -587,15 +587,15 @@ void invasion::ztizeniHry()
 {
     if (prekrocilCas(&intZtizeni) == true)
     {
-        if (intSpawnNepratele.delka > 700)
+        if (intSpawnNepratele.interval > 700)
         {
-            intSpawnNepratele.delka -= 100;
+            intSpawnNepratele.interval -= 100;
         }
 
-        if (intPohybNepratel.delka > 55)
+        if (intPohybNepratel.interval > 55)
         {
-            intPohybNepratel.delka -= 1;
+            intPohybNepratel.interval -= 1;
         }
-        Serial.printf("Ztizeni: %lu, Spawn: %lu, Pohyb: %lu\n", intZtizeni.soucasnaHodnota, intSpawnNepratele.delka, intPohybNepratel.delka);
+        Serial.printf("Ztizeni: %lu, Spawn: %lu, Pohyb: %lu\n", intZtizeni.soucasnaHodnota, intSpawnNepratele.interval, intPohybNepratel.interval);
     }
 }
