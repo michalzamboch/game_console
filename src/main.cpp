@@ -1,4 +1,5 @@
-#include <include.h>
+#include "include.h"
+#include <thread>
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 
@@ -26,45 +27,25 @@ extern void towerOfHanoiTheGame();
 
 /*******************************************************************/
 
+void test()
+{
+    
+}
+
 // startujici funkce, opakuje se jen jednou
 void setup()
 {
     srand((unsigned int)time(NULL));
     Serial.begin(9600);
-
-    inicializujDisplay();
-    inicializaceOvladani();
+    Serial.printf("\nStart konzole...\n");
+    
+    //digitalWrite(18, OUTPUT);
 }
 
 // funkce, která se opakuje neustále do kola ve smyčce
 void loop()
 {
-    delay(100);
-    ovladani = 0;
-    short zvolenaHra = menuMain();
-    ovladani = 0;
-    delay(100);
-
-    /*
-     * Příklad pro 10. maturitní otázku
-     * příkaz switch
-     */
-    switch (zvolenaHra)
-    {
-    case 1:
-        snakeTheGame();
-        break;
-    case 2:
-        towerOfHanoiTheGame();
-        break;
-    case 3:
-        invasionTheGame();
-        break;
-    default:
-        chyboveHlaseni();
-        break;
-    }
-    zvolenaHra = 0;
+    //Serial.printf("Konzole funguje...\n");
 }
 
 /*******************************************************************/
@@ -139,7 +120,7 @@ short **twoDimShortArr(int x, int y)
 
 bool prekrocilCas(interval *porovnavany)
 {
-    if ((millis() - porovnavany->soucasnaHodnota) > porovnavany->interval)
+    if ((millis() - porovnavany->soucasnaHodnota) > porovnavany->delka)
     {
         porovnavany->soucasnaHodnota = millis();
         return true;
@@ -159,11 +140,11 @@ bool opakovatHru()
     while (true)
     {
         soucasnyCas = millis();
-        if ((ovladani != 0) && ((ovladani & T_1) != T_1) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
+        if ((ovladani != 0) && ((ovladani & T_1) != T_1) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
         {
             return false;
         }
-        else if ((ovladani > 0) && ((ovladani & T_1) == T_1) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
+        else if ((ovladani > 0) && ((ovladani & T_1) == T_1) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
         {
             return true;
         }

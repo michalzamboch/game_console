@@ -1,4 +1,4 @@
-#include <include.h>
+#include "include.h"
 
 extern unsigned int ovladani;
 extern Adafruit_ST7735 tft;
@@ -40,14 +40,14 @@ static short ovladaniMenu()
     {
         soucasnyCas = millis();
 
-        if ((ovladani == T_DO_PREDU) && (pozice > 1) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
+        if ((ovladani == T_DO_PREDU) && (pozice > 1) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
         {
             intPrepnuti.soucasnaHodnota = soucasnyCas;
             ukazatel(pozice, ST7735_BLACK);
             pozice--;
             ukazatel(pozice, ST7735_WHITE);
         }
-        else if ((ovladani == T_DO_ZADU) && (pozice < 3) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
+        else if ((ovladani == T_DO_ZADU) && (pozice < 3) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
         {
             intPrepnuti.soucasnaHodnota = soucasnyCas;
             ukazatel(pozice, ST7735_BLACK);

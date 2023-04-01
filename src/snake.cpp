@@ -2,7 +2,7 @@
  * Soubor snake.cpp obsahuje kód ke hře SNAKE
  * */
 
-#include <include.h>
+#include "include.h"
 
 #define PIXEL 8
 #define X (160 / PIXEL)
@@ -158,7 +158,6 @@ void snake::jadroHry()
     vypisSkore();
     vykresliHada();
     
-    
     /*
      * Příklad pro 11. mat. ot.
      * do-while cyklus
@@ -214,7 +213,7 @@ void snake::vyhodnotHru()
     while (true)
     {
         soucasnyCas = millis();
-        if ((ovladani > 0) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
+        if ((ovladani > 0) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.delka))
         {
             break;
         }
@@ -349,7 +348,7 @@ bool snake::kolidujeS(short poziceX, short poziceY, short sCimX, short sCimY)
     else
     {
         return false;
-    }   
+    }
 }
 
 bool snake::kolidujeSeZdi(short poziceX, short poziceY)
@@ -451,22 +450,22 @@ void snake::ovladaniFunkce()
     }
 
     unsigned long soucasnyCas = millis();
-    if ((ovladani == T_DO_PRAVA) && (smer != T_DO_PRAVA) && (smer != T_DO_LEVA) && ((soucasnyCas - intZmenaSmeru.soucasnaHodnota) > intZmenaSmeru.interval))
+    if ((ovladani == T_DO_PRAVA) && (smer != T_DO_PRAVA) && (smer != T_DO_LEVA) && ((soucasnyCas - intZmenaSmeru.soucasnaHodnota) > intZmenaSmeru.delka))
     {
         zmenSmer(T_DO_PRAVA);
         return;
     }
-    else if ((ovladani == T_DO_LEVA) && (smer != T_DO_LEVA) && (smer != T_DO_PRAVA) && ((soucasnyCas - intZmenaSmeru.soucasnaHodnota) > intZmenaSmeru.interval))
+    else if ((ovladani == T_DO_LEVA) && (smer != T_DO_LEVA) && (smer != T_DO_PRAVA) && ((soucasnyCas - intZmenaSmeru.soucasnaHodnota) > intZmenaSmeru.delka))
     {
         zmenSmer(T_DO_LEVA);
         return;
     }
-    else if ((ovladani == T_DO_PREDU) && (smer != T_DO_PREDU) && (smer != T_DO_ZADU) && ((soucasnyCas - intZmenaSmeru.soucasnaHodnota) > intZmenaSmeru.interval))
+    else if ((ovladani == T_DO_PREDU) && (smer != T_DO_PREDU) && (smer != T_DO_ZADU) && ((soucasnyCas - intZmenaSmeru.soucasnaHodnota) > intZmenaSmeru.delka))
     {
         zmenSmer(T_DO_PREDU);
         return;
     }
-    else if ((ovladani == T_DO_ZADU) && (smer != T_DO_ZADU) && (smer != T_DO_PREDU) && ((soucasnyCas - intZmenaSmeru.soucasnaHodnota) > intZmenaSmeru.interval))
+    else if ((ovladani == T_DO_ZADU) && (smer != T_DO_ZADU) && (smer != T_DO_PREDU) && ((soucasnyCas - intZmenaSmeru.soucasnaHodnota) > intZmenaSmeru.delka))
     {
         zmenSmer(T_DO_ZADU);
         return;
