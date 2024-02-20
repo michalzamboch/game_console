@@ -1,6 +1,3 @@
-/* *
- * Soubor snake.cpp obsahuje kód ke hře SNAKE
- * */
 
 #include <include.h>
 
@@ -20,28 +17,15 @@ extern bool opakovatHru();
 extern bool prekrocilCas(interval *porovnavany);
 extern void vypisBity(int x, int y);
 
-/*
- * Příklad pro 14. maturitní otázku
- * Metoda - třída (objekt)
-*/
 class snake
 {
 private:
-    /*
-     * Příkad k maturitní otázce číslo 3
-     *  Datové typy
-    */
-
     short delka;
     short **had;
     short mazaciKostka[2];
     interval intZmenaSmeru;
     interval intVykresliPosun;
 
-    /*
-     * Příkad k maturitní otázce číslo 5
-     * POLE
-    */
     short ovoce[2];
     time_t casOvoce;
     bool objevSe;
@@ -66,7 +50,7 @@ private:
     void ovoceFunkce();
     void snezeniOvoce();
     void prodluzHada(short oKolik);
-    
+
     bool kolidujeSHadem(short poziceX, short poziceY);
     bool kolidujeSeZdi(short poziceX, short poziceY);
     bool kolidujeS(short poziceX, short poziceY, short sCimX, short sCimY);
@@ -77,14 +61,12 @@ protected:
     void jadroHry();
 
 public:
-    snake();        // konstruktor
-    ~snake();       // destruktor
+    snake();
+    ~snake();
     friend void snakeTheGame();
 };
 
-/***************************************** KOSTRA HRY *****************************************/
-
-snake::snake()      // konstruktor
+snake::snake()
 {
     tft.fillScreen(ST7735_BLACK);
     tft.setTextSize(1);
@@ -112,10 +94,6 @@ snake::snake()      // konstruktor
     mazaciKostka[0] = tempX - 1;
     mazaciKostka[1] = tempY;
 
-    /*
-     * Příklad pro 11. mat. ot.
-     * for cyklus
-    */
     for (int i = 0; i < delka; i++)
     {
         had[i][0] = tempX;
@@ -124,7 +102,7 @@ snake::snake()      // konstruktor
     }
 }
 
-snake::~snake()       // destruktor
+snake::~snake()
 {
     vymazHada();
 }
@@ -141,10 +119,7 @@ void snake::vymazHada()
     had = NULL;
 }
 
-/* snakeTheGame()
- * celková hra, neptří do třídy snake
-*/
-void snakeTheGame()      // funkce, která se volá pro spuštění hry
+void snakeTheGame()
 {
     snake *hraSnake = new snake;
 
@@ -157,36 +132,29 @@ void snake::jadroHry()
 {
     vypisSkore();
     vykresliHada();
-    
-    
-    /*
-     * Příklad pro 11. mat. ot.
-     * do-while cyklus
-    */
+
     do
     {
-        ovladaniFunkce();      // čtení z ovladani + nasměrování kam had poleze
-        
+        ovladaniFunkce();
+
         ovoceFunkce();
         snezeniOvoce();
-    
+
         if (ukonciHru == false)
         {
             if (prekrocilCas(&intVykresliPosun) == true)
             {
                 posunHadaOKostku();
                 vykresliHada();
-            }          
-        
+            }
+
             if (hadNarazil() == true)
             {
-                vyhodnotHru();  // pak už vyskočí
+                vyhodnotHru();
             }
         }
     } while (ukonciHru == false);
 }
-
-/***************************************** VYHODNOCENI HRY *****************************************/
 
 void snake::vyhodnotHru()
 {
@@ -204,13 +172,9 @@ void snake::vyhodnotHru()
     tft.printf("%d", skore);
 
     unsigned long soucasnyCas = millis();
-    interval intPrepnuti = { 200, soucasnyCas };
+    interval intPrepnuti = {200, soucasnyCas};
     ovladani = 0;
-    
-    /*
-     * Příklad pro 11. mat. ot.
-     * while cyklus
-    */
+
     while (true)
     {
         soucasnyCas = millis();
@@ -220,8 +184,6 @@ void snake::vyhodnotHru()
         }
     }
 }
-
-/***************************************** VYKRESLOVÁNÍ *****************************************/
 
 void snake::vykresliHada()
 {
@@ -241,14 +203,12 @@ void snake::vykresliKostickuHada(int kostickaIndex, uint16_t color)
     tft.fillRoundRect(had[kostickaIndex][0] * PIXEL, had[kostickaIndex][1] * PIXEL, PIXEL, PIXEL, 1, color);
 }
 
-/********************************************** OVOCE **********************************************/
-
 void snake::ovoceFunkce()
 {
     time_t casOvoce2;
     time(&casOvoce2);
     double casRozdil = difftime(casOvoce2, casOvoce);
-    
+
     if ((objevSe == true) && (casRozdil > 6))
     {
         do
@@ -258,7 +218,7 @@ void snake::ovoceFunkce()
         } while (kolidujeSHadem(ovoce[0], ovoce[1]) == true);
 
         tft.fillRoundRect(ovoce[0] * PIXEL, ovoce[1] * PIXEL, PIXEL, PIXEL, PIXEL / 2, ST7735_YELLOW);
-        
+
         objevSe = false;
         time(&casOvoce);
     }
@@ -295,23 +255,23 @@ void snake::snezeniOvoce()
 void snake::prodluzHada(short oKolik)
 {
     short **tempHad = twoDimShortArr(delka + 1, 2);
-    
+
     for (int i = 0; i < delka; i++)
     {
         tempHad[i][0] = had[i][0];
         tempHad[i][1] = had[i][1];
     }
-    
+
     tempHad[delka][0] = mazaciKostka[0];
     tempHad[delka][1] = mazaciKostka[1];
     mazaciKostka[0] = -1;
     mazaciKostka[1] = -1;
-    
+
     if (delka > 0)
     {
         vymazHada();
     }
-    
+
     had = tempHad;
     tempHad = NULL;
 
@@ -325,8 +285,6 @@ void snake::vypisSkore()
     tft.print(skore);
 }
 
-/*********************************************** TESTY KOLIZÍ ***********************************************/
-
 bool snake::kolidujeSHadem(short poziceX, short poziceY)
 {
     for (short i = 0; i < delka; i++)
@@ -334,9 +292,9 @@ bool snake::kolidujeSHadem(short poziceX, short poziceY)
         if (kolidujeS(poziceX, poziceY, had[i][0], had[i][1]))
         {
             return true;
-        } 
+        }
     }
-    
+
     return false;
 }
 
@@ -349,7 +307,7 @@ bool snake::kolidujeS(short poziceX, short poziceY, short sCimX, short sCimY)
     else
     {
         return false;
-    }   
+    }
 }
 
 bool snake::kolidujeSeZdi(short poziceX, short poziceY)
@@ -358,12 +316,12 @@ bool snake::kolidujeSeZdi(short poziceX, short poziceY)
     {
         return true;
     }
-    
+
     if ((poziceY > Y_MAX) || (poziceY < Y_MIN))
     {
         return true;
     }
-    
+
     return false;
 }
 
@@ -392,8 +350,6 @@ bool snake::hadKolidujeSamSeSebou()
     return false;
 }
 
-/*********************************************** POHYB HADA ***********************************************/
-
 void snake::posunHadaOKostku()
 {
     for (int i = (delka - 1); i > 0; i--)
@@ -401,11 +357,7 @@ void snake::posunHadaOKostku()
         had[i][0] = had[i - 1][0];
         had[i][1] = had[i - 1][1];
     }
-    
-    /*
-     * 2. příklad pro 10. maturitní otázku
-     * if/else podmínky
-    */
+
     if (smer == T_DO_LEVA)
     {
         posunutiVeSmeru(0, -1, X_MAX);
@@ -427,7 +379,7 @@ void snake::posunHadaOKostku()
 void snake::posunutiVeSmeru(int yIndex, int zmena, int extreme)
 {
     short tester[2];
-    
+
     tester[0] = had[0][0];
     tester[1] = had[0][1];
     tester[yIndex] += zmena;
@@ -471,7 +423,6 @@ void snake::ovladaniFunkce()
         zmenSmer(T_DO_ZADU);
         return;
     }
-
 }
 
 void snake::zmenSmer(int tempSmer)

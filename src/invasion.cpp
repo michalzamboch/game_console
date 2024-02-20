@@ -1,7 +1,3 @@
-/* *
- * Soubor invasion.cpp obsahuje kód ke hře invasion
- * */
-
 #include <include.h>
 
 extern unsigned int ovladani;
@@ -17,36 +13,25 @@ extern bool prekrocilCas(interval *porovnavany);
 #define X_MIN 0
 #define Y_MIN 15
 
-/******************************************* HLAVNÍ TŘÍDA invasion *******************************************/
-
 class invasion
 {
 private:
-    /******* OBECNE PROMENNE *******/
     bool ukonciHru;
     int skore;
     interval intZtizeni;
 
-    /******* PROMENNE K RAKETCE *******/
     const short sirkaRaketky = 9;
     const short vyskaRaketky = 5;
     const short raketkaPozY = 115;
     short raketkaPozX;
     interval intPohybRak;
 
-    /******* PROMENNE K NEPRATELUM ******/
     short pocetNepratel;
     short **nepratele;
     const short nepritelSirkaDelka = 11;
     interval intPohybNepratel;
     interval intSpawnNepratele;
 
-    /******* PROMENNE KE STRELACH ******/
-
-    /*
-     * Příkad k maturitní otázce číslo 7
-     * STATICKÉ A DYNAMICKÉ PROMĚNNÉ
-    */
     short pocetStrel;
     short **strely;
     const short strelaDelka = 7;
@@ -54,15 +39,11 @@ private:
     interval intVystrel;
     interval intPohybStrely;
 
-    /********************** PRIVATNI FUNKCE **********************/
-    
-    /******* OBECNE FUNKCE *******/
     void ovladaniFunkce();
     void konecneHlaseni();
     void vypisSkore();
     void ztizeniHry();
-    
-    /******* KOLIZE *******/
+
     bool komplexKontrolaKolizi();
     bool dveUzemiKoliduji(int a1, int a2, int b1, int b2);
     bool kontrolaProniknutiNepritele(int indexNepritele);
@@ -70,11 +51,9 @@ private:
     bool kolizeStrelyNepritele(int indexStrely, int indexNepritele);
     bool kolizeRaketkyNepritele(int indexNepritele);
     bool komplexKontrolaSestreleniStrelyNepritele();
-    
-    /****** FUNKCE K RAKETCE *******/
+
     void vykresliRaketku(uint16_t color);
 
-    /****** FUNKCE K NEPRATELUM *******/
     void vykresliJednohoNepritele(short index, uint16_t color);
     void vytvorNepratele();
     void vytvorJednohoNepritele();
@@ -82,7 +61,6 @@ private:
     void vymazNepratele();
     void vymazJednohoNepritele(short index);
 
-    /****** FUNKCE K STRELE *******/
     void vykresliJednuStrelu(short index, uint16_t color);
     void vytvorStrelu();
     void vykresliAPosunStrely(int oKolik);
@@ -99,9 +77,7 @@ public:
     friend void invasionTheGame();
 };
 
-/********************************** KOSTRA PROGRAMU **********************************/
-
-invasion::invasion()      // konstruktor
+invasion::invasion()
 {
     skore = 0;
     tft.fillScreen(ST7735_BLACK);
@@ -117,7 +93,7 @@ invasion::invasion()      // konstruktor
     intPohybNepratel = {75, soucasnyCas};
     intSpawnNepratele = {4000, soucasnyCas};
     intZtizeni = {6000, soucasnyCas};
-    
+
     raketkaPozX = 80;
     pocetNepratel = 0;
     pocetStrel = 0;
@@ -126,17 +102,14 @@ invasion::invasion()      // konstruktor
     strely = NULL;
 }
 
-invasion::~invasion()       // destruktor
+invasion::~invasion()
 {
-    /*
-     * vymaz Nepritele a strely
-    */
 
-   vymazNepratele();
-   vymazStrely();
+    vymazNepratele();
+    vymazStrely();
 }
 
-void invasionTheGame()      // funkce, která se volá pro spuštění hry
+void invasionTheGame()
 {
     invasion *hraInvasion = new invasion;
 
@@ -147,32 +120,30 @@ void invasionTheGame()      // funkce, která se volá pro spuštění hry
 
 void invasion::jadroHry()
 {
-    vykresliRaketku(ST7735_GREEN);      // počáteční vykreslení raketky na display
-    
-    do      // počátek cyklu v kterém se odehrává celá hra
+    vykresliRaketku(ST7735_GREEN);
+
+    do
     {
-        ovladaniFunkce();       // zjistí směr kam se má nebo nemá pohnout, jestli má raketka vystřelit nebo ukončit hru
+        ovladaniFunkce();
 
-        if (ukonciHru == false)     // pokud NENÍ zvoleno ukončení hry, pokračuje se zde kde prbíhá vnitřní logika programu / vyhodnocování stavu hry
+        if (ukonciHru == false)
         {
-            vytvorNepratele();      // funkce, která v určitém časovém intervalu, tvoří nové nepřátele
+            vytvorNepratele();
 
-            vykresliAPosunStrely(1);        // posune a vykreslí střely na display
-            vykresliAPosunNepratele(1);        // posune a vykreslí nepratele na display
+            vykresliAPosunStrely(1);
+            vykresliAPosunNepratele(1);
 
-            vymazZmizeleStrely();       // pokud nějaká střela netrefí cíl a jde mimo display, program ji vymaže
-            
-            if (komplexKontrolaKolizi() == true)        // zde se zkontroluje, zda se nesrazila střela s nepřítelem a nebo jestli nepřítel nenarazil do raketky
-            {                                           // pokud by nepritel narazil do raketky hra končí, pokud střela do nepřítele přičtou se hráči body
+            vymazZmizeleStrely();
+
+            if (komplexKontrolaKolizi() == true)
+            {
                 konecneHlaseni();
             }
 
-            ztizeniHry();       // v určitém časovém intervalu, se hra ztíží: zrychlením nepřátel a zmenšením intervalu, kdy objevují nepřátelé
+            ztizeniHry();
         }
-    } while (ukonciHru == false);  
+    } while (ukonciHru == false);
 }
-
-/*********************************************** OVLÁDÁNÍ ***********************************************/
 
 void invasion::ovladaniFunkce()
 {
@@ -184,35 +155,31 @@ void invasion::ovladaniFunkce()
         raketkaPozX++;
         vykresliRaketku(ST77XX_GREEN);
     }
-    else if (((ovladani & T_DO_LEVA) == T_DO_LEVA)  && ((soucasnyCas - intPohybRak.soucasnaHodnota) > intPohybRak.interval) && (raketkaPozX > 0))
+    else if (((ovladani & T_DO_LEVA) == T_DO_LEVA) && ((soucasnyCas - intPohybRak.soucasnaHodnota) > intPohybRak.interval) && (raketkaPozX > 0))
     {
         intPohybRak.soucasnaHodnota = soucasnyCas;
         vykresliRaketku(ST7735_BLACK);
         raketkaPozX--;
         vykresliRaketku(ST77XX_GREEN);
     }
-    
+
     if (((ovladani & T_1) == T_1) && ((soucasnyCas - intVystrel.soucasnaHodnota) > intVystrel.interval))
     {
         intVystrel.soucasnaHodnota = soucasnyCas;
         vytvorStrelu();
     }
-    
+
     if ((ovladani & T_2) == T_2)
     {
-        // ukoncit hru
+
         ukonciHru = true;
     }
 }
-
-/********************************** FUNKCE K OBECNÉ GRAFICE **********************************/
 
 void invasion::vykresliRaketku(uint16_t color)
 {
     tft.drawRoundRect(raketkaPozX, raketkaPozY, sirkaRaketky, vyskaRaketky, 2, color);
 }
-
-/*********************************************** TESTY KOLIZÍ ***********************************************/
 
 bool invasion::kolidujeS(short poziceX, short poziceY, short sCimX, short sCimY)
 {
@@ -231,7 +198,7 @@ bool invasion::kolizeRaketkyNepritele(int indexNepritele)
     bool shodaXPozic = dveUzemiKoliduji(raketkaPozX, raketkaPozX + sirkaRaketky, nepratele[indexNepritele][0], nepratele[indexNepritele][0] + nepritelSirkaDelka);
 
     bool shodaYPozic = dveUzemiKoliduji(raketkaPozY, raketkaPozY + vyskaRaketky, nepratele[indexNepritele][1], nepratele[indexNepritele][1] + nepritelSirkaDelka);
-    
+
     if ((shodaXPozic == true) && (shodaYPozic == true))
     {
         return true;
@@ -247,7 +214,7 @@ bool invasion::kolizeStrelyNepritele(int indexStrely, int indexNepritele)
     bool shodaXPozic = dveUzemiKoliduji(strely[indexStrely][0], strely[indexStrely][0] + strelaSirka, nepratele[indexNepritele][0], nepratele[indexNepritele][0] + nepritelSirkaDelka);
 
     bool shodaYPozic = dveUzemiKoliduji(strely[indexStrely][1], strely[indexStrely][1] + strelaDelka, nepratele[indexNepritele][1], nepratele[indexNepritele][1] + nepritelSirkaDelka);
-    
+
     if ((shodaXPozic == true) && (shodaYPozic == true))
     {
         return true;
@@ -282,7 +249,8 @@ bool invasion::komplexKontrolaSestreleniStrelyNepritele()
 
 bool invasion::komplexKontrolaKolizi()
 {
-    while (komplexKontrolaSestreleniStrelyNepritele() == true);
+    while (komplexKontrolaSestreleniStrelyNepritele() == true)
+        ;
 
     for (int nepritelIndex = 0; nepritelIndex < pocetNepratel; nepritelIndex++)
     {
@@ -297,8 +265,6 @@ bool invasion::komplexKontrolaKolizi()
             ukonciHru = true;
             return true;
         }
-        
-        /* mozna tady pridat dalsi kontroly: kolize s Raketkou nebo projiti hranic */
     }
 
     return false;
@@ -346,8 +312,6 @@ bool invasion::dveUzemiKoliduji(int a1, int a2, int b1, int b2)
     return false;
 }
 
-/*********************************************** STŘELY ***********************************************/
-
 void invasion::vymazStrely()
 {
     if (pocetStrel > 0)
@@ -371,7 +335,7 @@ void invasion::vytvorStrelu()
         tempStrely[i][0] = strely[i][0];
         tempStrely[i][1] = strely[i][1];
     }
-    
+
     tempStrely[pocetStrel][0] = raketkaPozX + 3;
     tempStrely[pocetStrel][1] = raketkaPozY - 10;
 
@@ -424,12 +388,12 @@ void invasion::vymazJednuStrelu(short index)
                 zapisovaciIndex++;
             }
         }
-        
+
         vymazStrely();
 
         strely = tempStrely;
         tempStrely = NULL;
-        
+
         pocetStrel--;
     }
 }
@@ -452,13 +416,11 @@ void invasion::vymazZmizeleStrely()
     }
 }
 
-/*********************************************** NEPRATELE ***********************************************/
-
 void invasion::vykresliJednohoNepritele(short index, uint16_t color)
 {
     tft.fillTriangle(nepratele[index][0], nepratele[index][1],
-    nepratele[index][0] + nepritelSirkaDelka - 1, nepratele[index][1],
-    nepratele[index][0] + nepritelSirkaDelka / 2, nepratele[index][1] + nepritelSirkaDelka, color);
+                     nepratele[index][0] + nepritelSirkaDelka - 1, nepratele[index][1],
+                     nepratele[index][0] + nepritelSirkaDelka / 2, nepratele[index][1] + nepritelSirkaDelka, color);
 }
 
 void invasion::vytvorNepratele()
@@ -472,7 +434,7 @@ void invasion::vytvorNepratele()
             tempNepratele[i][0] = nepratele[i][0];
             tempNepratele[i][1] = nepratele[i][1];
         }
-        
+
         tempNepratele[pocetNepratel][0] = nahodneCislo(nepritelSirkaDelka, X_MAX - 10);
         tempNepratele[pocetNepratel][1] = nahodneCislo(Y_MIN + 1, 20);
 
@@ -487,7 +449,6 @@ void invasion::vytvorNepratele()
 
 void invasion::vytvorJednohoNepritele()
 {
-
 }
 
 void invasion::vykresliAPosunNepratele(int oKolik)
@@ -534,7 +495,7 @@ void invasion::vymazJednohoNepritele(short index)
             zapisovaciIndex++;
         }
     }
-    
+
     vymazNepratele();
 
     nepratele = tempNepratele;
@@ -542,8 +503,6 @@ void invasion::vymazJednohoNepritele(short index)
 
     pocetNepratel--;
 }
-
-/*********************************************** VÝPISY ***********************************************/
 
 void invasion::vypisSkore()
 {
@@ -568,9 +527,9 @@ void invasion::konecneHlaseni()
     tft.printf("%d", skore);
 
     unsigned long soucasnyCas = millis();
-    interval intPrepnuti = { 200, soucasnyCas };
+    interval intPrepnuti = {200, soucasnyCas};
     ovladani = 0;
-    
+
     while (true)
     {
         soucasnyCas = millis();
@@ -580,8 +539,6 @@ void invasion::konecneHlaseni()
         }
     }
 }
-
-/*********************************************** ZTÍŽENÍ HRY ***********************************************/
 
 void invasion::ztizeniHry()
 {

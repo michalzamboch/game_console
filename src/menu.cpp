@@ -5,18 +5,11 @@ extern Adafruit_ST7735 tft;
 extern void inicializujDisplay();
 extern void vypisBity(int x, int y);
 
-/*
- * Příklad pro 2. maturitní otázku, strukturované programování
- * tento soubor je napsaný nejvíce pomocí techniky jazyka C - klasické strukturované programování 
-*/
-
 short menuMain();
 
 static void vypisMenu();
 static void ukazatel(short pozice, uint16_t color);
 static short ovladaniMenu();
-
-/**********************************************************************************************/
 
 short menuMain()
 {
@@ -33,7 +26,7 @@ static short ovladaniMenu()
     ukazatel(pozice, ST7735_WHITE);
 
     unsigned long soucasnyCas = millis();
-    interval intPrepnuti = { 150, soucasnyCas };
+    interval intPrepnuti = {150, soucasnyCas};
     ovladani = 0;
 
     while (true)
@@ -96,5 +89,3 @@ static void ukazatel(short pozice, uint16_t color)
         break;
     }
 }
-
-/*********************************************************************/

@@ -20,7 +20,6 @@ private:
     int pocetTahu;
     interval intPrepnuti;
 
-    /**** PRIVÁTNÍ FUNKCE ****/
     void vyhodnotHru();
 
     unsigned int hodnotaPatra(unsigned int indexPatra);
@@ -31,7 +30,7 @@ private:
     void vykresliVez(short x, short y, int indexVeze);
     void vykresliJednoPatro(short x, short y, int indexVeze, unsigned int patro);
     void vypisPocetTahu();
-    
+
     void volba();
     void ukazatel(int pozice, uint16_t color);
     void obratitBit(unsigned int *porovnanany, unsigned int bit);
@@ -45,42 +44,41 @@ public:
     friend void towerOfHanoiTheGame();
 };
 
-towerOfHanoi::towerOfHanoi()      // konstruktor
+towerOfHanoi::towerOfHanoi()
 {
     tft.fillScreen(ST7735_BLACK);
     tft.setTextSize(1);
     tft.drawLine(0, 15, 159, 15, ST7735_WHITE);
     tft.setCursor(40, 5);
     tft.print("Pocet tahu: 0");
-    
+
     veze[0] = 0;
     veze[1] = 0;
     veze[2] = 0;
     for (int i = 1; i <= hodnotaPatra(pocetPater); i <<= 1)
     {
         veze[0] |= i;
-    }  
+    }
     cilovaHodnota = veze[0];
-    
+
     vezePoz[0][0] = 4;
     vezePoz[0][1] = 20;
     vezePoz[1][0] = 52;
-    vezePoz[1][1] = 70; 
+    vezePoz[1][1] = 70;
     vezePoz[2][0] = 100;
     vezePoz[2][1] = 20;
 
-    intPrepnuti = { 200, millis() };
+    intPrepnuti = {200, millis()};
 
     ukonciHru = false;
     pocetTahu = 0;
 }
 
-towerOfHanoi::~towerOfHanoi()       // destruktor
+towerOfHanoi::~towerOfHanoi()
 {
-
 }
 
-void towerOfHanoiTheGame()      // funkce, která se volá pro spuštění hry
+void towerOfHanoiTheGame()
 {
     towerOfHanoi *hratowerOfHanoi = new towerOfHanoi;
 
@@ -93,19 +91,17 @@ void towerOfHanoi::jadroHry()
 {
     do
     {
-        tft.fillRect(0, 16, 159, 112, ST7735_BLACK);        // vymázání věží z obrazovky
-        vykresliVsechnyVeze();      // vykreslení všech tří věží
-        
-        volba();        // zde se zvolí odkud a kam se bude nějaké patro přesouvat
-        if (ukonciHru == false)     // zkontrolu je se jestli hráč nechce odejít ze hry
-        {
-            presunPatro();      // zde se přesune kotouč/patro na zvolené místo
-            vyhodnotHru();      // zkontroluje se, jestli hráč již nevyhrál
-        }
-    } while (ukonciHru == false);       // cyklus se opakuje dokud funkce vyhodnotHru(), neřekne, že je konec hry a hráč vyhrál
-}
+        tft.fillRect(0, 16, 159, 112, ST7735_BLACK);
+        vykresliVsechnyVeze();
 
-/*********************************************** VYKRESLOVACÍ FUNKCE ***********************************************/
+        volba();
+        if (ukonciHru == false)
+        {
+            presunPatro();
+            vyhodnotHru();
+        }
+    } while (ukonciHru == false);
+}
 
 void towerOfHanoi::vykresliVsechnyVeze()
 {
@@ -170,16 +166,14 @@ void towerOfHanoi::vypisPocetTahu()
     tft.print(pocetTahu);
 }
 
-/*********************************************** OVLÁDÁNÍ - VOLBA VĚŽÍ ***********************************************/
-
 void towerOfHanoi::volba()
 {
-    short temp[2] = { -1, -1 };
-    
-    for (int i = 0; i < 2; i++)    
+    short temp[2] = {-1, -1};
+
+    for (int i = 0; i < 2; i++)
     {
         double soucasnyCas = 0;
-        
+
         while (true)
         {
             soucasnyCas = millis();
@@ -187,7 +181,7 @@ void towerOfHanoi::volba()
             if ((ovladani == T_DO_LEVA) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
             {
                 intPrepnuti.soucasnaHodnota = soucasnyCas;
-                
+
                 if (temp[0] == 0)
                 {
                     ukazatel(0, ST7735_BLACK);
@@ -206,7 +200,7 @@ void towerOfHanoi::volba()
             else if ((ovladani == T_DO_ZADU) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
             {
                 intPrepnuti.soucasnaHodnota = soucasnyCas;
-                
+
                 if (temp[0] == 1)
                 {
                     ukazatel(1, ST7735_BLACK);
@@ -218,14 +212,14 @@ void towerOfHanoi::volba()
                     ukazatel(1, ST7735_WHITE);
                     temp[i] = 1;
                 }
-                
+
                 Serial.printf("Temp[%d] = %d\n", i, temp[i]);
                 break;
             }
             else if ((ovladani == T_DO_PRAVA) && ((soucasnyCas - intPrepnuti.soucasnaHodnota) > intPrepnuti.interval))
             {
                 intPrepnuti.soucasnaHodnota = soucasnyCas;
-                
+
                 if (temp[0] == 2)
                 {
                     ukazatel(2, ST7735_BLACK);
@@ -251,7 +245,7 @@ void towerOfHanoi::volba()
             }
         }
     }
-    
+
     from = temp[0];
     to = temp[1];
 }
@@ -264,8 +258,6 @@ void towerOfHanoi::ukazatel(int pozice, uint16_t color)
 
     tft.fillRect(xPoz, yPoz, delka, 3, color);
 }
-
-/*********************************************** VYHODNOCENÍ HRY ***********************************************/
 
 void towerOfHanoi::vyhodnotHru()
 {
@@ -286,11 +278,11 @@ void towerOfHanoi::vyhodnotHru()
         tft.printf("POCET TAHU:");
         tft.setCursor(15, 80);
         tft.printf("%d", pocetTahu);
-        
+
         double soucasnyCas = millis();
         intPrepnuti.soucasnaHodnota = soucasnyCas;
         ovladani = 0;
-        
+
         while (true)
         {
             soucasnyCas = millis();
@@ -302,8 +294,6 @@ void towerOfHanoi::vyhodnotHru()
     }
 }
 
-/*********************************************** PATRA ***********************************************/
-
 unsigned int towerOfHanoi::hodnotaPatra(unsigned int indexPatra)
 {
     if (indexPatra > 31 || indexPatra < 1)
@@ -311,7 +301,7 @@ unsigned int towerOfHanoi::hodnotaPatra(unsigned int indexPatra)
         return 0;
     }
     indexPatra--;
-    
+
     return (1 << indexPatra);
 }
 
@@ -324,7 +314,7 @@ unsigned int towerOfHanoi::nejensiPatro(int index)
             return i;
         }
     }
-    
+
     return 0;
 }
 
@@ -333,7 +323,7 @@ void towerOfHanoi::presunPatro()
     unsigned int tempPatroFrom = nejensiPatro(from);
     unsigned int tempPatroTo = nejensiPatro(to);
 
-    if (( (tempPatroFrom < tempPatroTo) || ((tempPatroTo == 0) && (tempPatroFrom > 0)) ) && (from != to)&& (tempPatroFrom > 0))
+    if (((tempPatroFrom < tempPatroTo) || ((tempPatroTo == 0) && (tempPatroFrom > 0))) && (from != to) && (tempPatroFrom > 0))
     {
         Serial.printf("From: %d, To: %d\n", tempPatroFrom, tempPatroTo);
         obratitBit(&veze[from], tempPatroFrom);

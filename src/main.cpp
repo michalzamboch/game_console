@@ -14,19 +14,10 @@ int nahodneCislo(int from, int to);
 short **twoDimShortArr(int x, int y);
 bool prekrocilCas(interval *porovnavany);
 
-/****************************** HRY ********************************/
-
-/*
- * Příklad pro 13. maturitní otázku
- * procedury
- */
 extern void snakeTheGame();
 extern void invasionTheGame();
 extern void towerOfHanoiTheGame();
 
-/*******************************************************************/
-
-// startujici funkce, opakuje se jen jednou
 void setup()
 {
     srand((unsigned int)time(NULL));
@@ -36,7 +27,6 @@ void setup()
     inicializaceOvladani();
 }
 
-// funkce, která se opakuje neustále do kola ve smyčce
 void loop()
 {
     delay(100);
@@ -45,10 +35,6 @@ void loop()
     ovladani = 0;
     delay(100);
 
-    /*
-     * Příklad pro 10. maturitní otázku
-     * příkaz switch
-     */
     switch (zvolenaHra)
     {
     case 1:
@@ -67,13 +53,11 @@ void loop()
     zvolenaHra = 0;
 }
 
-/*******************************************************************/
-
-void inicializujDisplay() // inicializace pro diplay
+void inicializujDisplay()
 {
-    tft.initR(INITR_BLACKTAB);    // Initialize a ST7735S chip, black tab
-    tft.fillScreen(ST7735_BLACK); // něco jako clearScreen, vyčistí obrazovku
-    tft.setTextWrap(true);        //  text nepoleze mimo display
+    tft.initR(INITR_BLACKTAB);
+    tft.fillScreen(ST7735_BLACK);
+    tft.setTextWrap(true);
     tft.setRotation(1);
 }
 
@@ -88,20 +72,18 @@ void chyboveHlaseni()
     tft.println("Restartuj konzoli.");
 
     while (true)
-        ; // lolin se musi restartovat
+        ;
 }
 
-/***********************************************************/
-
-int nahodneCislo(int from, int to) // příklad k maturitní otázce číslo 1 - algoritmus
+int nahodneCislo(int from, int to)
 {
-    if (from > to) // ochrana pro správné fungování algoritmu
+    if (from > to)
     {
-        std::swap(from, to); // prohodí se from a to
+        std::swap(from, to);
     }
 
     int tempFrom = from;
-    int posunuti = abs(from); // menší hodnota muže být v mínusu a tímto ji překlápíme na
+    int posunuti = abs(from);
     to++;
 
     if (tempFrom < 0)

@@ -1,11 +1,5 @@
-/* *
- * Soubor control.cpp složí k inicializování ovládání tlačítky
- * inicializují se zde jednotlivé interrupty
- * */
 
 #include <include.h>
-
-/********************************************************************/
 
 extern Adafruit_ST7735 tft;
 
@@ -19,24 +13,28 @@ static void obratitBit(unsigned int *porovnanany, unsigned int bit, unsigned int
 void vypisBity(int x, int y);
 void inicializaceOvladani();
 
-/********************************************************************/
-
 static void jednotlivePiny(void *pin)
 {
     unsigned int bit = 0;
     switch ((int)pin)
     {
-    case P_DO_PREDU: bit = T_DO_PREDU;
+    case P_DO_PREDU:
+        bit = T_DO_PREDU;
         break;
-    case P_DO_ZADU: bit = T_DO_ZADU;
+    case P_DO_ZADU:
+        bit = T_DO_ZADU;
         break;
-    case P_DO_LEVA: bit = T_DO_LEVA;
+    case P_DO_LEVA:
+        bit = T_DO_LEVA;
         break;
-    case P_DO_PRAVA: bit = T_DO_PRAVA;
+    case P_DO_PRAVA:
+        bit = T_DO_PRAVA;
         break;
-    case P_1: bit = T_1;
+    case P_1:
+        bit = T_1;
         break;
-    case P_2: bit = T_2;
+    case P_2:
+        bit = T_2;
         break;
     }
 
@@ -51,7 +49,7 @@ static void obratitBit(unsigned int *porovnanany, unsigned int bit, unsigned int
     {
         delay(10);
         if (digitalRead(pin) == LOW)
-        {      
+        {
             *porovnanany |= bit;
         }
     }
@@ -82,11 +80,9 @@ static void inicializacePinu()
     pinMode(P_DO_ZADU, INPUT_PULLUP);
     pinMode(P_DO_LEVA, INPUT_PULLUP);
     pinMode(P_DO_PRAVA, INPUT_PULLUP);
-  
+
     pinMode(P_1, INPUT_PULLUP);
     pinMode(P_2, INPUT_PULLUP);
-    
-    // všechny piny propojit s GND (modrý drát s GND)
 }
 
 void inicializaceOvladani()
@@ -102,7 +98,7 @@ void vypisBity(int x, int y)
     for (unsigned int bit = 32; bit >= 1; bit >>= 1)
     {
         if ((ovladani & bit) == bit)
-        {  
+        {
             tft.print("1");
         }
         else
